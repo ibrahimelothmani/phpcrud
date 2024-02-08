@@ -6,6 +6,6 @@ $_SESSION = array();
 
 session_destroy();
 
-header('Location: authenticator.php');
+header('Location: auth.php');
 exit;
 ?>
