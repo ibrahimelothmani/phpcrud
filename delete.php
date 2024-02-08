@@ -27,7 +27,6 @@ if (isset($_GET['id'])) {
 } else {
     exit('No ID specified!');
 }
-
 ?>
 
 <?= template_header('Delete') ?>

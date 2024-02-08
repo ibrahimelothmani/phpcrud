@@ -32,9 +32,7 @@ phone = ?, title = ?, created = ? WHERE id = ?');
 } else {
     exit('No ID specified!');
 }
-
 ?>
-
 <?= template_header('Read') ?>
 <div class="content update">
     <h2>Update Contact #<?= $contact['id'] ?></h2>

@@ -3,6 +3,7 @@ require_once 'functions.php';
 
 // Connect to MySQL database
 $pdo = pdo_connect_mysql();
+session_start();
 
 if(isset($_POST['username']) && isset($_POST['password'])) {
     $username = $_POST['username'];
@@ -19,7 +20,7 @@ if(isset($_POST['username']) && isset($_POST['password'])) {
         exit;
     } else {
         // Redirect back to login page if login fails
-        header('Location: login.php');
+        header('Location: authenticator.php');
         exit;
     }
 }
