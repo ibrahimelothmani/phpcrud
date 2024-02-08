@@ -1,50 +1,66 @@
 <?php
-require_once 'functions.php';
+
+include 'functions.php';
 
 // Connect to MySQL database
 $pdo = pdo_connect_mysql();
 session_start();
 
-if(isset($_POST['username']) && isset($_POST['password'])) {
+if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
+    echo "Check if the user is already logged in";
+    header("Location : index.php");
+    exit;
+}
+
+// check if the form is submitted 
+if (isset($_POST['username']) && isset($_POST['password'])) {
+    // echo "Check if the form is submitted";
     $username = $_POST['username'];
     $password = $_POST['password'];
+}
+// Validate credentials
+$stmt = $pdo->prepare('SELECT email, username, password FROM contacts WHERE username = :username');
+$stmt->execute(['username' => $username]);
+$user = $stmt->fetch();
 
-    // Verify login credentials
-    $stmt = $pdo->prepare('SELECT * FROM contacts WHERE username = ? AND password = ?');
-    $stmt->execute([$username, $password]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($user) {
-        // Redirect to read.php with user information
-        header('Location: read.php?username=' . $user['username'] . '&email=' . $user['email']);
-        exit;
-    } else {
-        // Redirect back to login page if login fails
-        header('Location: authenticator.php');
+if ($user) {
+    if ($password = $user['password']) {
+        session_start();
+        $_SESSION['loggedin'] = true;
+        $_SESSION['email'] = $user['email'];
+        $_SESSION['username'] = $user['username'];
+        header('Location: index.php');
         exit;
     }
+} else {
+    // Password is incorrect
+    $error = "Invalid password";
 }
+
 ?>
 
 
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="utf-8">
-<title>$title</title>
-<link href="style.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+    <meta charset="utf-8">
+    <title>$title</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
 </head>
+
 <body>
-<nav class="navtop">
-<div>
-<h1>Website Title</h1>
-<a href="index.php"><i class="fas fa-home"></i>Home</a>
-<a href="read.php"><i class="fas fa-address-book"></i>Contacts</a>
-<a href="authenticator.php"><i class="fas fa-address-book"></i>Login</a>
-</div>
-</nav>
+    <nav class="navtop">
+        <div>
+            <h1>Website Title</h1>
+            <a href="index.php"><i class="fas fa-home"></i>Home</a>
+            <a href="read.php"><i class="fas fa-address-book"></i>Contacts</a>
+            <a href="authenticator.php"><i class="fas fa-address-book"></i>Login</a>
+        </div>
+    </nav>
 </body>
+
 </html>
 
 <!DOCTYPE html>
@@ -107,7 +123,7 @@ if(isset($_POST['username']) && isset($_POST['password'])) {
                 </div>
 
                 <!-- Submit button -->
-                <button type="submit" class="btn btn-primary btn-block mb-4 ms-5 me-5">Sign in</button>
+                <button type="button" class="btn btn-primary btn-block mb-4 ms-5 me-5">Sign in</button>
 
                 <!-- Register buttons -->
                 <div class="text-center">
@@ -120,7 +136,10 @@ if(isset($_POST['username']) && isset($_POST['password'])) {
             <!-- You can implement the registration form similar to the login form -->
         </div>
     </div>
-    <!-- Pills content -->
+
+    <?php if (isset($error)) { ?>
+        <div><?php echo $error; ?></div>
+    <?php } ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
