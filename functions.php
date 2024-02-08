@@ -30,6 +30,9 @@ echo <<<EOT
 <h1>Website Title</h1>
 <a href="index.php"><i class="fas fa-home"></i>Home</a>
 <a href="read.php"><i class="fas fa-address-book"></i>Contacts</a>
+<a href="logout.php">
+<button type="button" class="btn btn-danger">Logout</button>
+</a>
 </div>
 </nav>
 EOT;
