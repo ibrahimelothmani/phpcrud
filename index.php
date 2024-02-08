@@ -1,4 +1,12 @@
 <?php
+session_start();
+if(!isset($_SESSION['loggedin'])){
+    header('Location: authenticator.php');
+    exit;
+}
+?>
+
+<?php
 include 'functions.php';
 // Your PHP code here.
 // Home Page template below.
