@@ -29,7 +29,7 @@ if(isset($_POST['username']) && isset($_POST['password'])){
 
 
      // Prepare and execute the query
-     $stmt = $pdo->prepare("SELECT email, username, password FROM contacts WHERE username = :username");
+     $stmt = $pdo->prepare("SELECT email, username, password, role FROM contacts WHERE username = :username");
      $stmt->execute(['username' => $username]);
  
      // Fetch user data
@@ -47,6 +47,7 @@ if(isset($_POST['username']) && isset($_POST['password'])){
             $_SESSION['loggedin'] = true;
             $_SESSION['email'] = $user['email'];
             $_SESSION['username'] = $user['username'];
+            $_SESSION['role'] = $user['role'];
             // Redirect user to dashboard page
             header("Location: index.php");
             exit;
@@ -146,6 +147,6 @@ if(isset($_POST['username']) && isset($_POST['password'])){
    
 </div>
 
-
+<!-- <script src="script.js"></script> -->
 </body>
 </html>

@@ -23,11 +23,12 @@ $contacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $num_contacts = $pdo->query('SELECT COUNT(*) FROM contacts')->fetchColumn();
 
 // Check if the logged-in user is an admin or a user
-$is_admin = ($_SESSION['username'] === 'JOHN'); // Assume the user is admin for testing, replace with your actual logic
-$is_admin = ($_SESSION['username'] === 'Arnold');
-$is_admin = ($_SESSION['username'] === 'Daniel');
+
+$is_admin = ($_SESSION['role'] === 'admin');
 
 ?>
+
+
 <?= template_header('Read') ?>
 <div class="content read">
     <h2>Read Contacts</h2>
